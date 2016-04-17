@@ -41,7 +41,7 @@ public class VehicleResource {
         return new ResponseEntity<>(carSalesService.getAllVehicles(), HttpStatus.OK);
     }
 	
-	@RequestMapping(value = "/docreatecar",
+	@RequestMapping(value = "/cars",
 		        method = RequestMethod.POST,
 		        produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> createCar(@RequestBody Vehicle vehicle, BindingResult result) {
@@ -49,7 +49,7 @@ public class VehicleResource {
 			logger.info("Vehicle: "+vehicle);
 			try {
 				carSalesService.createVehicle(vehicle);
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>(HttpStatus.CREATED);
 			} catch (ServiceException e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}

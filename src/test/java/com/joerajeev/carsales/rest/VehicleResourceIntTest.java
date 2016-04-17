@@ -1,10 +1,21 @@
 package com.joerajeev.carsales.rest;
 
-import static org.hamcrest.Matchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -22,12 +33,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.jayway.jsonpath.JsonPath;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joerajeev.carsales.Application;
 import com.joerajeev.carsales.service.CarSalesService;
 import com.joerajeev.carsales.service.User;
@@ -43,6 +53,11 @@ import com.joerajeev.carsales.service.Vehicle;
 @WebAppConfiguration
 @IntegrationTest
 public class VehicleResourceIntTest {
+	
+	  /** MediaType for JSON UTF8 */
+    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
+            MediaType.APPLICATION_JSON.getType(),
+            MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
 	//Default vehicle test data
 	private static final int VEHICLE_YEAR = 2014;
@@ -104,7 +119,7 @@ public class VehicleResourceIntTest {
     
     @Test
     @Transactional
-    public void getAllVehicles() throws Exception {
+    public void testGetAllVehicles() throws Exception {
     	int ownerId = carSalesService.createUser(user);
     	vehicle.setOwner(ownerId);
     	carSalesService.createVehicle(vehicle);
@@ -121,5 +136,26 @@ public class VehicleResourceIntTest {
          .andExpect(jsonPath("$.[?(@.reg=="+VEHICLE_REG+")].owner").value(hasItem(ownerId)));
 
     }
+    
+    @Test
+    @Transactional
+    public void testCreateVehicle() throws Exception {
+        int databaseSizeBeforeCreate = carSalesService.getAllVehicles().size();
 
+        int ownerId = carSalesService.createUser(user);
+    	vehicle.setOwner(ownerId);
+    	
+        // Create the Booking
+        restAdMockMvc.perform(post("/api/cars")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(vehicle)))
+                .andExpect(status().isCreated());
+
+        // Validate the Vehicle in the database
+        List<Vehicle> vehicles = carSalesService.getAllVehicles();
+        assertThat(vehicles).hasSize(databaseSizeBeforeCreate + 1);
+        //TODO improve this to test the exact vechile was saved
+    }
+
+    
 }
