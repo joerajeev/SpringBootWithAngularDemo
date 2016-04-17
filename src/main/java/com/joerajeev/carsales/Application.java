@@ -6,6 +6,7 @@ import org.jboss.logging.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 
 @SpringBootApplication
 public class Application {
@@ -17,13 +18,13 @@ public class Application {
     	SpringApplication.run(Application.class, args);
     }
 
-	@Bean
-	public DataSource getDataSource() {
+	@Bean(destroyMethod = "close")
+	public DataSource getDataSource(Environment env) {
 		BasicDataSource dataSource = new BasicDataSource();
-			dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-			dataSource.setUsername("javauser");
-			dataSource.setPassword("javadude");
-			dataSource.setUrl("jdbc:mysql://localhost:3306/carsales");
+			dataSource.setDriverClassName(env.getRequiredProperty("db.driver"));
+			dataSource.setUsername(env.getRequiredProperty("db.user"));
+			dataSource.setPassword(env.getRequiredProperty("db.password"));
+			dataSource.setUrl(env.getRequiredProperty("db.url"));
 			return dataSource;
 	}
 	
