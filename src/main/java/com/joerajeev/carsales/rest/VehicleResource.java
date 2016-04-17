@@ -34,7 +34,7 @@ public class VehicleResource {
 	@Autowired
 	private CarSalesService carSalesService;
 	
-	@RequestMapping(value = "/allcars",
+	@RequestMapping(value = "/cars",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Vehicle>> listAvailableCars() {
