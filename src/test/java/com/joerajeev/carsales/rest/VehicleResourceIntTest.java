@@ -154,7 +154,7 @@ public class VehicleResourceIntTest {
         // Validate the Vehicle in the database
         List<Vehicle> vehicles = carSalesService.getAllVehicles();
         assertThat(vehicles).hasSize(databaseSizeBeforeCreate + 1);
-        //TODO improve this to test the exact vechile was saved
+        //TODO improve this to test the exact vehicle was saved
     }
 
     
