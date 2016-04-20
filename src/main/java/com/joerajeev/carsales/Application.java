@@ -5,12 +5,17 @@ import org.jboss.logging.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @SpringBootApplication
+@ComponentScan(basePackages={"com.joerajeev.carsales", 
+							"com.joerajeev.carsales.entity",
+							"com.joerajeev.carsales.repository",
+							"com.joerajeev.carsales.config"})
 public class Application {
 
 	private static Logger log = Logger.getLogger(Application.class);
@@ -31,5 +36,6 @@ public class Application {
         return new HikariDataSource(dataSourceConfig);
     }
 	
+    
 
 }

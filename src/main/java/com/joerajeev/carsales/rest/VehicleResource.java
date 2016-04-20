@@ -1,7 +1,8 @@
 package com.joerajeev.carsales.rest;
 
-import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +11,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.joerajeev.carsales.service.CarSalesService;
-import com.joerajeev.carsales.service.ServiceException;
-import com.joerajeev.carsales.service.User;
-import com.joerajeev.carsales.service.Vehicle;
+import com.joerajeev.carsales.entity.Vehicle;
+import com.joerajeev.carsales.repository.VehicleRepository;
 
 /**
  * 
@@ -29,16 +29,16 @@ import com.joerajeev.carsales.service.Vehicle;
 @RequestMapping("/api")
 public class VehicleResource {
 
-	Logger logger = Logger.getLogger(VehicleResource.class.toString());
+	Logger log = Logger.getLogger(VehicleResource.class.toString());
 	
 	@Autowired
-	private CarSalesService carSalesService;
+	private VehicleRepository vehicleRepo;
 	
 	@RequestMapping(value = "/cars",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Vehicle>> listAvailableCars() {
-        return new ResponseEntity<>(carSalesService.getAllVehicles(), HttpStatus.OK);
+        return new ResponseEntity<>(vehicleRepo.findAll(), HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/cars",
@@ -46,20 +46,36 @@ public class VehicleResource {
 		        produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> createCar(@RequestBody Vehicle vehicle, BindingResult result) {
 		if(!result.hasErrors()) {
-			logger.info("Vehicle: "+vehicle);
+			log.info("Vehicle: "+vehicle);
 			try {
-				carSalesService.createVehicle(vehicle);
+				vehicleRepo.save(vehicle);
 				return new ResponseEntity<>(HttpStatus.CREATED);
-			} catch (ServiceException e) {
+			} catch (Exception e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}else {
 			for (ObjectError error : result.getAllErrors()) {
-				logger.warning(error.toString());
+				log.warning(error.toString());
 			}
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 	}
+	
+	 /**
+     * GET  /bookings/:id -> get the "id" booking.
+     */
+   /* @RequestMapping(value = "/cars/{reg}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Vehicle> getVehicle(@PathVariable String reg) {
+        log.log(Level.FINE, "REST request to get Booking : {}", reg);
+        Vehicle vehicle = vehicleRepo.findOne(reg);
+        return Optional.ofNullable(vehicle)
+            .map(result -> new ResponseEntity<>(
+                result,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }*/
 
 }
