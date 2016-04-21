@@ -65,17 +65,18 @@ public class VehicleResource {
 	 /**
      * GET  /bookings/:id -> get the "id" booking.
      */
-   /* @RequestMapping(value = "/cars/{reg}",
+    @RequestMapping(value = "/cars/{reg}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Vehicle> getVehicle(@PathVariable String reg) {
         log.log(Level.FINE, "REST request to get Booking : {}", reg);
-        Vehicle vehicle = vehicleRepo.findOne(reg);
-        return Optional.ofNullable(vehicle)
+        Vehicle vehicle = vehicleRepo.findByReg(reg);
+        ResponseEntity<Vehicle> re = Optional.ofNullable(vehicle)
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }*/
+        return re;
+    }
 
 }

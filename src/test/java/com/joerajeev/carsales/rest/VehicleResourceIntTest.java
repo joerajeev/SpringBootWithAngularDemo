@@ -29,6 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -168,19 +169,35 @@ public class VehicleResourceIntTest {
         // Validate the Vehicle in the database
         List<Vehicle> vehicles = vehicleRepo.findAll();
         assertThat(vehicles).hasSize(databaseSizeBeforeCreate + 1);
-       // vehicleRepo.findOne()
-        //TODO improve this to test the exact vehicle was saved
+        Vehicle retrievedVehicle = vehicleRepo.findByReg(vehicle.getReg());
+        assertVehicleMatches(vehicle, retrievedVehicle);
+        
     }
 
-   /* @Test
-    public void testFindVehicle() throws Exception{
+	protected void assertVehicleMatches(Vehicle expected, Vehicle actual) {
+		assertThat(vehicle.getReg()).isEqualTo(actual.getReg());
+        assertThat(vehicle.getColour()).isEqualTo(actual.getColour());
+        assertThat(vehicle.getMake()).isEqualTo(actual.getMake());
+        assertThat(vehicle.getModel()).isEqualTo(actual.getModel());
+        assertThat(vehicle.getYear()).isEqualTo(actual.getYear());
+        assertThat(vehicle.getMilage()).isEqualTo(actual.getMilage());
+        assertThat(vehicle.getUser().getId()).isEqualTo(actual.getUser().getId());
+	}
+
+    @Test
+    @Transactional
+    public void testFindVehicle() {
     	
     	vehicleRepo.save(vehicle);
     	
-    	restVechileMockMvc.perform(get("/api/cars/{reg}", vehicle.getReg()))
-    		.andExpect(status().isOk())
-    		.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    		.andExpect(jasonpath(""))
-    }*/
+    	try {
+			restVechileMockMvc.perform(get("/api/cars/{reg}", VEHICLE_REG))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.reg").value(VEHICLE_REG));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
     
 }
