@@ -15,6 +15,7 @@ public class Advert implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue
 	private int id;
 
 	@Temporal(TemporalType.DATE)
@@ -22,6 +23,7 @@ public class Advert implements Serializable {
 
 	private String description;
 
+	//Path to the image
 	private String image;
 
 	@Temporal(TemporalType.DATE)

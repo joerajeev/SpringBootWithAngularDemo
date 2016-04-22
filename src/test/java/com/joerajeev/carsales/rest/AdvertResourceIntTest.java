@@ -1,7 +1,10 @@
 package com.joerajeev.carsales.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.StrictAssertions.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -9,12 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.aspectj.weaver.AjAttribute.MethodDeclarationLineNumberAttribute;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,14 +32,17 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.joerajeev.carsales.Application;
+import com.joerajeev.carsales.entity.Advert;
 import com.joerajeev.carsales.entity.Authority;
 import com.joerajeev.carsales.entity.User;
 import com.joerajeev.carsales.entity.Vehicle;
+import com.joerajeev.carsales.repository.AdvertRepository;
 import com.joerajeev.carsales.repository.AuthorityRepository;
 import com.joerajeev.carsales.repository.UserRepository;
 import com.joerajeev.carsales.repository.VehicleRepository;
@@ -51,8 +56,10 @@ import com.joerajeev.carsales.repository.VehicleRepository;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest
-public class VehicleResourceIntTest {
+public class AdvertResourceIntTest {
 	
+	private static final Date ADVERT_CREATED = new Date();
+	private static final String ADVERT_DESCRIPTION = "An awesome newish car";
 	//Default vehicle test data
 	private static final Integer VEHICLE_YEAR = 2014;
 	private static final String OWNER_ADDRESS = "Mooroolbark";
@@ -75,6 +82,9 @@ public class VehicleResourceIntTest {
 	
 	@Autowired
 	private AuthorityRepository authorityRepo;
+	
+	@Autowired
+	private AdvertRepository adRepo;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -82,18 +92,19 @@ public class VehicleResourceIntTest {
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-    private MockMvc restVechileMockMvc;
+    private MockMvc restAdvertMockMvc;
 
     private Authority authority;
     private User user;
     private Vehicle vehicle;
+    private Advert ad;
 
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        VehicleResource vehicleResource = new VehicleResource();
-        ReflectionTestUtils.setField(vehicleResource, "vehicleRepo", vehicleRepo);
-        this.restVechileMockMvc = MockMvcBuilders.standaloneSetup(vehicleResource)
+        AdvertResource advertResource = new AdvertResource();
+        ReflectionTestUtils.setField(advertResource, "advertRepo", adRepo);
+        this.restAdvertMockMvc = MockMvcBuilders.standaloneSetup(advertResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
     }
@@ -121,75 +132,76 @@ public class VehicleResourceIntTest {
         vehicle.setModel(VEHICLE_MODEL);
         vehicle.setUser(user);
         
-        authorityRepo.save(authority);
-    	user = userRepo.save(user);
+        ad = new Advert();
+        ad.setCreated(ADVERT_CREATED);
+        ad.setDescription(ADVERT_DESCRIPTION);
+        ad.setVehicle(vehicle);
+        
+        authorityRepo.saveAndFlush(authority);
+    	user = userRepo.saveAndFlush(user);
+    	vehicleRepo.saveAndFlush(vehicle);
 
     }
     
     @Test
     @Transactional
-    public void testGetAllVehicles() throws Exception {
+    public void testGetAllAds() throws Exception {
     	    	
-    	vehicleRepo.save(vehicle);
+    	ad = adRepo.saveAndFlush(ad);
 
-    	restVechileMockMvc.perform(get("/api/cars"))
+    	restAdvertMockMvc.perform(get("/api/ads"))
          .andExpect(status().isOk())
          .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-         .andExpect(jsonPath("$.[*].reg").value(hasItem(VEHICLE_REG)))
-         .andExpect(vehicleAttributeToContainValue("year", VEHICLE_YEAR))
-         .andExpect(vehicleAttributeToContainValue("milage", VEHICLE_MILAGE))
-         .andExpect(vehicleAttributeToContainValue("colour", VEHICLE_COLOUR))
-         .andExpect(vehicleAttributeToContainValue("make", VEHICLE_MAKE))
-         .andExpect(vehicleAttributeToContainValue("model", VEHICLE_MODEL))
-         .andExpect(vehicleAttributeToContainValue("user.id", user.getId()));
+         .andExpect(jsonPath("$.[*].id").value(hasItem(ad.getId())))
+         .andExpect(advertAttributeToContainValue("description", ADVERT_DESCRIPTION))
+         .andExpect(advertAttributeToContainValue("created", ADVERT_CREATED.getTime()))
+         .andExpect(advertAttributeToContainValue("vehicle.reg", VEHICLE_REG));
     	
     }
 
 	@SuppressWarnings("unchecked")
-	protected <V extends Object> ResultMatcher vehicleAttributeToContainValue(String attribute, V value) {
-		return jsonPath("$.[?(@.reg=="+VEHICLE_REG+")]."+ attribute).value(contains(value));
+	protected <V extends Object> ResultMatcher advertAttributeToContainValue(String attribute, V value) {
+		return jsonPath("$.[?(@.id=="+ad.getId()+")]."+ attribute).value(contains(value));
 	}
     
     @Test
     @Transactional
-    public void testCreateVehicle() throws Exception {
-        int databaseSizeBeforeCreate = vehicleRepo.findAll().size();
+    public void testCreateAdvert() throws Exception {
+        int databaseSizeBeforeCreate = adRepo.findAll().size();
 
         // Create the Vehicle
-        restVechileMockMvc.perform(post("/api/cars")
+        restAdvertMockMvc.perform(post("/api/ads")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(vehicle)))
-                .andExpect(status().isCreated());
+                .content(TestUtil.convertObjectToJsonBytes(ad)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(notNullValue()))
+                .andExpect(jsonPath("$.description").value(ADVERT_DESCRIPTION))
+                .andExpect(jsonPath("$.created").value(ADVERT_CREATED.getTime()))
+                .andExpect(jsonPath("$.image").value(nullValue()))
+                .andExpect(jsonPath("$.modified").value(nullValue()))
+                .andExpect(jsonPath("$.vehicle.reg").value(VEHICLE_REG));
 
         // Validate the Vehicle in the database
-        List<Vehicle> vehicles = vehicleRepo.findAll();
-        assertThat(vehicles).hasSize(databaseSizeBeforeCreate + 1);
-        Vehicle retrievedVehicle = vehicleRepo.findByReg(vehicle.getReg());
-        assertVehicleMatches(vehicle, retrievedVehicle);
-        
+        List<Advert> allAds = adRepo.findAll();
+        assertThat(allAds).hasSize(databaseSizeBeforeCreate + 1);
     }
-
-	protected void assertVehicleMatches(Vehicle expected, Vehicle actual) {
-		assertThat(vehicle.getReg()).isEqualTo(actual.getReg());
-        assertThat(vehicle.getColour()).isEqualTo(actual.getColour());
-        assertThat(vehicle.getMake()).isEqualTo(actual.getMake());
-        assertThat(vehicle.getModel()).isEqualTo(actual.getModel());
-        assertThat(vehicle.getYear()).isEqualTo(actual.getYear());
-        assertThat(vehicle.getMilage()).isEqualTo(actual.getMilage());
-        assertThat(vehicle.getUser().getId()).isEqualTo(actual.getUser().getId());
-	}
 
     @Test
     @Transactional
-    public void testFindVehicle() {
+    public void testFindAd() {
     	
-    	vehicleRepo.save(vehicle);
+    	ad = adRepo.saveAndFlush(ad);
     	
     	try {
-			restVechileMockMvc.perform(get("/api/cars/{reg}", VEHICLE_REG))
+			restAdvertMockMvc.perform(get("/api/ads/{id}", ad.getId()))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.reg").value(VEHICLE_REG));
+				.andExpect(jsonPath("$.id").value(ad.getId()))
+				 .andExpect(jsonPath("$.description").value(ADVERT_DESCRIPTION))
+	             .andExpect(jsonPath("$.created").value(ADVERT_CREATED.getTime()))
+	             .andExpect(jsonPath("$.image").value(nullValue()))
+	             .andExpect(jsonPath("$.modified").value(nullValue()))
+	             .andExpect(jsonPath("$.vehicle.reg").value(VEHICLE_REG));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

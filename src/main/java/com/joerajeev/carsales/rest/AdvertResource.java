@@ -1,5 +1,6 @@
 package com.joerajeev.carsales.rest;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.joerajeev.carsales.entity.Vehicle;
-import com.joerajeev.carsales.repository.VehicleRepository;
+import com.joerajeev.carsales.entity.Advert;
+import com.joerajeev.carsales.repository.AdvertRepository;
 
 /**
  * 
@@ -27,41 +28,31 @@ import com.joerajeev.carsales.repository.VehicleRepository;
  */
 @RestController
 @RequestMapping("/api")
-public class VehicleResource {
+public class AdvertResource {
 
-	Logger log = Logger.getLogger(VehicleResource.class.toString());
+	Logger log = Logger.getLogger(AdvertResource.class.toString());
 	
 	@Autowired
-	private VehicleRepository vehicleRepo;
+	private AdvertRepository advertRepo;
 	
-	/**
-	 * GET  /cars -> get all the vehicles.
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/cars",
+	@RequestMapping(value = "/ads",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Vehicle>> listAvailableCars() {
-        return new ResponseEntity<>(vehicleRepo.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<Advert>> listAvailableAdverts() {
+        return new ResponseEntity<>(advertRepo.findAll(), HttpStatus.OK);
     }
 	
-	/**
-	 * POST /cars -> create a vehicle.
-	 * 
-	 * @param vehicle	Vehicle to be created.
-	 * @param result
-	 * @return
-	 */
-	@RequestMapping(value = "/cars",
+	@RequestMapping(value = "/ads",
 		        method = RequestMethod.POST,
 		        produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> createCar(@RequestBody Vehicle vehicle, BindingResult result) {
+	public ResponseEntity<Advert> createAdvert(@RequestBody Advert advert, BindingResult result) {
 		if(!result.hasErrors()) {
-			log.info("Vehicle: "+vehicle);
+			log.info("Advert: "+advert);
 			try {
-				vehicleRepo.save(vehicle);
-				return new ResponseEntity<>(HttpStatus.CREATED);
+				Advert createdAdvert = advertRepo.save(advert);
+				//return new ResponseEntity<>(HttpStatus.CREATED);
+				return ResponseEntity.created(new URI(String.valueOf(createdAdvert.getId())))
+						.body(createdAdvert);
 			} catch (Exception e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
@@ -75,15 +66,15 @@ public class VehicleResource {
 	}
 	
 	 /**
-     * GET  /cars/:id -> get a car by it's registration number.
+     * GET  /ads/:id -> get ad by id.
      */
-    @RequestMapping(value = "/cars/{reg}",
+    @RequestMapping(value = "/ads/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Vehicle> getVehicle(@PathVariable String reg) {
-        log.log(Level.FINE, "REST request to get Vehicle : {}", reg);
-        Vehicle vehicle = vehicleRepo.findByReg(reg);
-        return Optional.ofNullable(vehicle)
+    public ResponseEntity<Advert> getVehicle(@PathVariable int id) {
+        log.log(Level.FINE, "REST request to get Advert: {}", id);
+        Advert matchingVehicles = advertRepo.findOne(id);
+        return Optional.ofNullable(matchingVehicles)
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))
