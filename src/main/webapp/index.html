@@ -6,8 +6,34 @@
 <link rel="stylesheet" href="../lib/bootstrap.min.css"/>
 </head>
 <body>
-<div ng-controller='AdvertController'>
-	Hello {{name}}!
+<div ng-controller="AdvertController">
+	<section>
+		<form>
+			<div class="form-group">
+				<label for="searchbox">Search</label>
+				<input id="searchbox" type="text" ng-model="search" class="form-control">
+			</div>
+		</form>
+		<table class="table table-striped">
+			<tr>
+				<th>Rego Number</th>
+				<th>Make</th>
+				<th>Model</th>
+				<th>Year</th>
+				<th>Colour</th>
+				<th>Milage</th>
+			</tr>
+			<tr ng-repeat="v in vehicles | filter:search">
+				<th>{{v.reg}}</th>
+				<th>{{v.make}}</th>
+				<th>{{v.model}}</th>
+				<th>{{v.year}}</th>
+				<th>{{v.colour}}</th>
+				<th>{{v.milage}}</th>
+			</tr>
+				
+		</table>
+	</section>
 </div>
 <footer>
 	<p>Powered by Spring Boot and Angular </p>

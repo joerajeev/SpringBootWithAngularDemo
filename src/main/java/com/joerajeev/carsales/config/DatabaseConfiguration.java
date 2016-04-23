@@ -52,7 +52,6 @@ public class DatabaseConfiguration {
         } else {
             config.addDataSourceProperty("password", ""); // HikariCP doesn't allow null password
         }
-        
         return new HikariDataSource(config);
     }
 
