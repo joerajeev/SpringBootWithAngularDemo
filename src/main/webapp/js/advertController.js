@@ -8,7 +8,7 @@
 			.then(function (response) {
 				$scope.vehicles = response.data;
 			});
-	}
+	};
 	
 	angular.module('carsales').controller('AdvertController', AdvertController);
 }());
