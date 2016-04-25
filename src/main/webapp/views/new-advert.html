@@ -1,0 +1,48 @@
+<section>
+    <h3>Create a new Advert</h3>
+	<form>
+		<div class="form-group">
+			<label for="description">Description</label>
+			<input id="description" ng-model="advert.description" type="text" class="form-control">
+
+			<h4>Vehicle Details</h4>
+			<div>
+				<label>
+					<input id="search-vehicle" type="radio" name="vehicle"
+						value="search" ng-model="vehicleInputMethod" ng-click="test()">
+					Search existing
+				</label>
+				<input type="text" ng-show="vehicleInputMethod == 'search'" ng-model="vehicle"
+                    uib-typeahead="vehicle as vehicle.reg for vehicle in vehicles | filter:{reg:$viewValue} | limitTo:8" 
+                    class="form-control" typeahead-on-select="updateVehicleEditForm()"/>
+			</div>
+
+			<div>
+				<label>
+					<input id="input-vehicle" type="radio" name="vehicle" ng-model="vehicleInputMethod" 
+					   value="new" ng-click="clearExistingVehicle()">
+					Input details
+				</label>
+			</div>
+
+			<fieldset ng-disabled="vehicleInputMethod == 'search'">
+			    <label for="rego">Rego</label>
+				<input id="rego" type="text" ng-model="advert.vehicle.reg" class="form-control" value="vehicle.reg">
+			    <label for="make">Make</label>
+				<input id="make" type="text" ng-model="advert.vehicle.make" class="form-control">
+			    <label for="model">Model</label>
+				<input id="model" type="text" ng-model="advert.vehicle.model" class="form-control">
+			    <label for="colour">Colour</label>
+				<input id="colour" type="text" ng-model="advert.vehicle.colour" class="form-control">
+			    <label for="year">Year</label>
+				<input id="year" type="text" ng-model="advert.vehicle.year" class="form-control">
+			    <label for="milage">Milage</label>
+				<input id="milage" type="text" ng-model="advert.vehicle.milage" class="form-control">
+			</fieldset>
+			
+			<input type="submit" ng-click="saveAdvert()" class="form-control">
+
+		</div>
+	</form>
+
+</section>

@@ -82,7 +82,7 @@ public class VehicleResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Vehicle> getVehicle(@PathVariable String reg) {
         log.log(Level.FINE, "REST request to get Vehicle : {}", reg);
-        Vehicle vehicle = vehicleRepo.findByReg(reg);
+        Vehicle vehicle = vehicleRepo.findOne(reg);
         return Optional.ofNullable(vehicle)
             .map(result -> new ResponseEntity<>(
                 result,

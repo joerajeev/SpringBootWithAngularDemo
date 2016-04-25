@@ -5,9 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.joerajeev.carsales.entity.Vehicle;
 
 /**
- * Spring Data JPA repository for the Authority entity.
+ * Spring Data JPA repository for the Vehicle entity.
  */
-public interface VehicleRepository extends JpaRepository<Vehicle,Long> {
+public interface VehicleRepository extends JpaRepository<Vehicle,String> {
 	
-	Vehicle findByReg(String reg);
 }

@@ -104,6 +104,7 @@ public class AdvertResourceIntTest {
         MockitoAnnotations.initMocks(this);
         AdvertResource advertResource = new AdvertResource();
         ReflectionTestUtils.setField(advertResource, "advertRepo", adRepo);
+        ReflectionTestUtils.setField(advertResource, "vehicleRepo", vehicleRepo);
         this.restAdvertMockMvc = MockMvcBuilders.standaloneSetup(advertResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();

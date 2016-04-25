@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.joerajeev.carsales.entity.Advert;
+import com.joerajeev.carsales.entity.Vehicle;
 import com.joerajeev.carsales.repository.AdvertRepository;
+import com.joerajeev.carsales.repository.VehicleRepository;
 
 /**
  * 
@@ -33,8 +35,18 @@ public class AdvertResource {
 	Logger log = Logger.getLogger(AdvertResource.class.toString());
 	
 	@Autowired
+	private VehicleRepository vehicleRepo;
+	
+	@Autowired
 	private AdvertRepository advertRepo;
 	
+	
+	
+	/**
+	 * GET /ads retrieves all adverts.
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = "/ads",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,6 +54,13 @@ public class AdvertResource {
         return new ResponseEntity<>(advertRepo.findAll(), HttpStatus.OK);
     }
 	
+	/**
+	 * POST -> /ads to create a new advert.
+	 * 
+	 * @param advert
+	 * @param result
+	 * @return
+	 */
 	@RequestMapping(value = "/ads",
 		        method = RequestMethod.POST,
 		        produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,11 +68,14 @@ public class AdvertResource {
 		if(!result.hasErrors()) {
 			log.info("Advert: "+advert);
 			try {
+				String vehicleRego = advert.getVehicle().getReg();
+				saveVehicleIfItDoesntExist(advert, vehicleRego);
 				Advert createdAdvert = advertRepo.save(advert);
 				//return new ResponseEntity<>(HttpStatus.CREATED);
 				return ResponseEntity.created(new URI(String.valueOf(createdAdvert.getId())))
 						.body(createdAdvert);
 			} catch (Exception e) {
+				log.log(Level.WARNING, "Error saving advert", e);
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}else {
@@ -63,6 +85,13 @@ public class AdvertResource {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
+	}
+
+	protected void saveVehicleIfItDoesntExist(Advert advert, String vehicleRego) {
+		Vehicle vehicle = vehicleRepo.findOne(vehicleRego);
+		if(vehicle == null){
+			vehicleRepo.save(advert.getVehicle());
+		}
 	}
 	
 	 /**

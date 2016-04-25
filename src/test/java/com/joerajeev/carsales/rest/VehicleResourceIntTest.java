@@ -164,7 +164,7 @@ public class VehicleResourceIntTest {
         // Validate the Vehicle in the database
         List<Vehicle> vehicles = vehicleRepo.findAll();
         assertThat(vehicles).hasSize(databaseSizeBeforeCreate + 1);
-        Vehicle retrievedVehicle = vehicleRepo.findByReg(vehicle.getReg());
+        Vehicle retrievedVehicle = vehicleRepo.findOne(vehicle.getReg());
         assertVehicleMatches(vehicle, retrievedVehicle);
         
     }
