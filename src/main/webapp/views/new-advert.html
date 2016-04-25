@@ -2,6 +2,10 @@
     <h3>Create new advert</h3>
 	<form>
 	   <br>
+	   <div>
+	       <p ng-show="message" class="bg-success">{{message}}</p>
+	       <p ng-show="error" class="bg-danger">{{error}}</p>
+	   </div>
 		<div class="form-group">
 			<fieldset>
 				<div class="form-horizontal">

@@ -16,10 +16,10 @@
 			  console.log("advert: " + $scope.advert);
 			 $http.post('/api/ads',  $scope.advert)
 			 	.then(function() {
-			 		console.log("saved advert");
+			 		$scope.message = "Advert saved successfully";
 			 	},
 			 	function() {
-			 		console.log("error saving advert");
+			 		$scope.error = "Error saving advert";
 			 	});
 		  }
 		  
