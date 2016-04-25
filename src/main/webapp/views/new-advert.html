@@ -1,46 +1,94 @@
 <section>
-    <h3>Create a new Advert</h3>
+    <h3>Create new advert</h3>
 	<form>
+	   <br>
 		<div class="form-group">
-			<label for="description">Description</label>
-			<input id="description" ng-model="advert.description" type="text" class="form-control">
+			<fieldset>
+				<div class="form-horizontal">
+					<label for="description" class="col-sm-2">Description</label>
+					<div class="col-sm-5">
+						<textarea id="description" ng-model="advert.description"
+							class="form-control" rows="3"></textarea>
+					</div>
 
-			<h4>Vehicle Details</h4>
-			<div>
-				<label>
-					<input id="search-vehicle" type="radio" name="vehicle"
-						value="search" ng-model="vehicleInputMethod" ng-click="test()">
-					Search existing
-				</label>
-				<input type="text" ng-show="vehicleInputMethod == 'search'" ng-model="vehicle"
-                    uib-typeahead="vehicle as vehicle.reg for vehicle in vehicles | filter:{reg:$viewValue} | limitTo:8" 
-                    class="form-control" typeahead-on-select="updateVehicleEditForm()"/>
-			</div>
-
-			<div>
-				<label>
-					<input id="input-vehicle" type="radio" name="vehicle" ng-model="vehicleInputMethod" 
-					   value="new" ng-click="clearExistingVehicle()">
-					Input details
-				</label>
-			</div>
-
-			<fieldset ng-disabled="vehicleInputMethod == 'search'">
-			    <label for="rego">Rego</label>
-				<input id="rego" type="text" ng-model="advert.vehicle.reg" class="form-control" value="vehicle.reg">
-			    <label for="make">Make</label>
-				<input id="make" type="text" ng-model="advert.vehicle.make" class="form-control">
-			    <label for="model">Model</label>
-				<input id="model" type="text" ng-model="advert.vehicle.model" class="form-control">
-			    <label for="colour">Colour</label>
-				<input id="colour" type="text" ng-model="advert.vehicle.colour" class="form-control">
-			    <label for="year">Year</label>
-				<input id="year" type="text" ng-model="advert.vehicle.year" class="form-control">
-			    <label for="milage">Milage</label>
-				<input id="milage" type="text" ng-model="advert.vehicle.milage" class="form-control">
+				</div>
 			</fieldset>
-			
-			<input type="submit" ng-click="saveAdvert()" class="form-control">
+
+			<fieldset>
+				<h4>Vehicle</h4>
+				<fieldset>
+					<div class="form-horizontal radio">
+						<div>
+							<label class="col-sm-2"> <input id="search-vehicle"
+								type="radio" name="vehicle" value="search"
+								ng-model="vehicleInputMethod" ng-click="test()"> Search
+								existing
+							</label>
+						</div>
+						<div class="col-sm-5">
+							<input type="text" ng-show="vehicleInputMethod == 'search'"
+								ng-model="vehicle"
+								uib-typeahead="vehicle as vehicle.reg for vehicle in vehicles | filter:{reg:$viewValue} | limitTo:8"
+								class="form-control"
+								typeahead-on-select="updateVehicleEditForm()" />
+						</div>
+					</div>
+				</fieldset>
+				<div class="radio">
+					<label> <input id="input-vehicle" type="radio"
+						name="vehicle" ng-model="vehicleInputMethod" value="new"
+						ng-click="clearExistingVehicle()"> Input details
+					</label>
+				</div>
+			</fieldset>
+			<fieldset ng-disabled="vehicleInputMethod == 'search'"
+				class="form-horizontal">
+				<div class="form-group">
+					<label for="rego" class="col-sm-2 control-label">Rego</label>
+					<div class="col-sm-5">
+						<input id="rego" type="text" ng-model="advert.vehicle.reg"
+							class="form-control" value="vehicle.reg">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="make" class="col-sm-2 control-label">Make</label>
+					<div class="col-sm-5">
+						<input id="make" type="text" ng-model="advert.vehicle.make"
+							class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="model" class="col-sm-2 control-label">Model</label>
+					<div class="col-sm-5">
+						<input id="model" type="text" ng-model="advert.vehicle.model"
+							class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="colour" class="col-sm-2 control-label">Colour</label>
+					<div class="col-sm-5">
+						<input id="colour" type="text" ng-model="advert.vehicle.colour"
+							class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="year" class="col-sm-2 control-label">Year</label>
+					<div class="col-sm-5">
+						<input id="year" type="text" ng-model="advert.vehicle.year"
+							class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="milage" class="col-sm-2 control-label">Milage</label>
+					<div class="col-sm-5">
+						<input id="milage" type="text" ng-model="advert.vehicle.milage"
+							class="form-control">
+					</div>
+				</div>
+
+			</fieldset>
+
+			<input type="submit" ng-click="saveAdvert()"  class="btn btn-primary" align="right">
 
 		</div>
 	</form>
