@@ -1,0 +1,31 @@
+<section class="ad-container">
+	<div class="ad-header">{{ad.vehicle.year}} {{ad.vehicle.make}}
+		{{ad.vehicle.model | uppercase}}</div>
+
+	<div class="ad-content">
+		<div class="ad-image">
+			<img src="images/not-found_298x0.jpg" alt="Image not found"
+				class="viewad">
+		</div>
+		<div class="ad-key-details">
+			<div class="ad-detail ad-value ad-price">{{ad.price | currency}}</div>
+			<div class="ad-detail">
+				<div>Registration</div>
+				<div class="ad-value">{{ad.vehicle.reg}}</div>
+			</div>
+			<div class="ad-detail">
+				<div>Colour</div>
+				<div class="ad-value">{{ad.vehicle.colour || "Not specified"}}</div>
+			</div>
+			<div class="ad-detail">
+				<div>Milage</div>
+				<div class="ad-value">{{ad.vehicle.milage || "Not specified"}}</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ad-description">
+		<div class="ad-description-header">Sellers comments</div>
+		<div >{{ad.description}}</div>
+	</div>
+</section>

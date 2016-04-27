@@ -1,30 +1,32 @@
 <section>
+         <h2>Welcome to car sales</h2>
 		<form>
 			<div class="form-group">
-				<label for="searchbox">Search</label>
+				<label for="searchbox">What are you looking for?</label>
 				<input id="searchbox" type="text" ng-model="search" class="form-control">
 			</div>
 		</form>
+		
+		<div>
 		<table class="table table-striped">
 			<tr>
-				<th>Rego Number</th>
+				<th>Description</th>
 				<th>Make</th>
 				<th>Model</th>
 				<th>Year</th>
-				<th>Colour</th>
-				<th>Milage</th>
+				<th>Price</th>
 			</tr>
-			<tr ng-repeat="v in vehicles | filter:search">
-				<th>{{v.reg}}</th>
-				<th>{{v.make}}</th>
-				<th>{{v.model}}</th>
-				<th>{{v.year}}</th>
-				<th>{{v.colour}}</th>
-				<th>{{v.milage}}</th>
+			<tr ng-repeat="ad in ads | filter:search" ng-click="showAdvert(ad)">
+				<th>{{ad.description}}</th>
+				<th>{{ad.vehicle.make}}</th>
+				<th>{{ad.vehicle.model}}</th>
+				<th>{{ad.vehicle.year}}</th>
+				<th>{{ad.price}}</th>
 			</tr>
 				
 		</table>
-		<div>
-		  <a href="#/new-advert" class="btn btn-default" role="button">New Advert</a>
 		</div>
+		<div class="right-button">
+          <a href="#/new-advert" class="btn btn-primary" role="button">New Advert</a>
+        </div>
 	</section>

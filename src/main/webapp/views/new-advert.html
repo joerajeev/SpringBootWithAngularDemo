@@ -7,14 +7,20 @@
 	       <p ng-show="error" class="bg-danger">{{error}}</p>
 	   </div>
 		<div class="form-group">
-			<fieldset>
-				<div class="form-horizontal">
+			<fieldset class="form-horizontal">
+				<div class="form-group">
 					<label for="description" class="col-sm-2">Description</label>
 					<div class="col-sm-5">
 						<textarea id="description" ng-model="advert.description"
 							class="form-control" rows="3"></textarea>
 					</div>
-
+				</div>	
+				<div class="form-group">
+                    <label for="price" class="col-sm-2">Price</label>
+                    <div class="col-sm-5">
+                        <input id="price" type="text" ng-model="advert.price"
+                            class="form-control" value="advert.price">
+                    </div>
 				</div>
 			</fieldset>
 

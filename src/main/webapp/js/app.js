@@ -16,6 +16,10 @@
 				controller: 'AdvertController',
 				templateUrl: '../views/new-advert.html'
 			})
+			.when('/advert/:id', {
+				controller: 'SingleAdvertController',
+				templateUrl: '../views/advert.html'
+			})
 			.otherwise({ redirectTo : '/'});
 	});
 }());

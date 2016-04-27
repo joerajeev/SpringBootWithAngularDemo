@@ -5,15 +5,20 @@
 	
 	var AdvertController = function($scope, $http) {
 		
-		$http.get('/api/cars')
+		$http.get('/api/ads')
 			.then(function (response) {
-				$scope.vehicles = response.data;
+				$scope.ads = response.data;
 			});
 		
+		$http.get('/api/cars')
+		.then(function (response) {
+			$scope.vehicles = response.data;
+		});
+		
 		  $scope.searchText = undefined;
+		  
 		  $scope.advert = new Object();
 		  $scope.saveAdvert = function() {
-			  console.log("advert: " + $scope.advert);
 			 $http.post('/api/ads',  $scope.advert)
 			 	.then(function() {
 			 		$scope.message = "Advert saved successfully";
@@ -29,6 +34,10 @@
 		  
 		  $scope.clearExistingVehicle = function() {
 			  $scope.advert.vehicle = undefined;
+		  }
+		  
+		  $scope.showAdvert = function(advert) {
+			  window.location.href = "#/advert/" + advert.id; 
 		  }
 		 
 	};
