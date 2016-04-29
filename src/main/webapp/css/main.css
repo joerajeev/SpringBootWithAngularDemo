@@ -11,54 +11,38 @@ footer {
 	position: relative;
 	top: 70px;
 }
-
-img.viewad {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-}
-
 .ad-container {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
 	display: -webkit-flex;
 	display: flex;
-	width: 800px;
-	height: 380px;
-	background-color: lightgrey;
-	position: relative;
-	flex-direction: column;
+	-webkit-flex-flow: row wrap;
+	flex-flow: row wrap;
 }
-
+.ad-container > * {
+  padding: 10px;
+  flex: 1 100%;
+}
 .ad-header {
-	height: 30px;
-	width: 600px;
 	font-size: 175%;
-	margin: auto;
-}
-
-.ad-content {
-	display: flex;
-	flex-direction: row;
-	height: 240px;
-	width: 700px;
-	margin-left: 40px;
-	margin-right: 40px;
+	/* background: deepskyblue; */
+	padding-left: 40px;
 }
 .ad-image {
-    width: 350px;
-    height: 200px;
+    /* background: blue; */
+    display: flex;
+}
+.ad-image img  {
+	margin: auto;
 }
 .ad-key-details {
-    width: 300px;
-    height: 240px;
+    /* background: tomato; */
 }
 .ad-description {
-	height: 40px;
-	width: 500px;
-	margin: auto;
-	display: flex;
-	flex-direction: column;
+	/* background: lightgreen; */
+	padding-left: 50px;
 }
-
 .ad-detail {
 	margin: 20px;
 }
@@ -70,4 +54,10 @@ img.viewad {
 }
 .ad-description-header {
 	font-weight: bold;
+}
+
+@media all and (min-width: 800px) {
+  .ad-image { order: 1; flex: 1 auto; } 
+  .ad-key-details { order: 2; flex: 2 auto;  }
+  .ad-description { order: 3; }
 }
