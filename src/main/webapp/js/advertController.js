@@ -3,30 +3,31 @@
  */
 (function() {
 	
-	var AdvertController = function($scope, $http) {
+	var AdvertController = function($scope, $http, advertFactory) {
 		
-		$http.get('/api/ads')
+		advertFactory.getAds()
 			.then(function (response) {
 				$scope.ads = response.data;
-			});
+		  });
 		
-		$http.get('/api/cars')
-		.then(function (response) {
-			$scope.vehicles = response.data;
-		});
+		  $http.get('/api/cars')
+			.then(function (response) {
+				$scope.vehicles = response.data;
+		  });
 		
 		  $scope.searchText = undefined;
 		  
 		  $scope.advert = new Object();
 		  $scope.saveAdvert = function() {
-			 $http.post('/api/ads',  $scope.advert)
-			 	.then(function() {
+			  advertFactory.save($scope.advert)
+			 	.success(function() {
 			 		$scope.message = "Advert saved successfully";
-			 	},
-			 	function() {
+			 	})
+			 	.error(function() {
 			 		$scope.error = "Error saving advert";
 			 	});
-		  }
+		  };
+		  
 		  
 		  $scope.updateVehicleEditForm = function() {
 			  $scope.advert.vehicle = $scope.vehicle;

@@ -3,15 +3,12 @@
  */
 (function() {
 	
-	var SingleAdvertController = function($scope, $routeParams, $http) {
+	var SingleAdvertController = function($scope, $routeParams, $http, advertFactory) {
 		
-		$http.get('/api/ads/' + $routeParams.id)
+		advertFactory.getAd($routeParams.id)
 			.then(function (response) {
-				console.log("retrived ad "+ response.data);
 				$scope.ad = response.data;
 			});
-		
-		 
 		 
 	};
 	
