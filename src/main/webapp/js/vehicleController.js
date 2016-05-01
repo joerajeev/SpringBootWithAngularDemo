@@ -1,5 +1,5 @@
 /**
- * 
+ * Contains the view logic for vehicle related pages.
  */
 (function() {
 	

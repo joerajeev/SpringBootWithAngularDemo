@@ -1,3 +1,6 @@
+/**
+ * Contains functions that may be reusable by the application
+ */
 (function(){
 	
 	var advertFactory = function($http){

@@ -9,15 +9,15 @@
 		
 		$routeProvider
 			.when('/', {
-				controller: 'AdvertController',
+				controller: 'AdvertsController',
 				templateUrl: '../views/adverts.html'
 			})
 			.when('/new-advert', {
-				controller: 'AdvertController',
+				controller: 'NewAdvertController',
 				templateUrl: '../views/new-advert.html'
 			})
 			.when('/advert/:id', {
-				controller: 'SingleAdvertController',
+				controller: 'ViewAdvertController',
 				templateUrl: '../views/advert.html'
 			})
 			.otherwise({ redirectTo : '/'});

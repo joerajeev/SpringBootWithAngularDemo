@@ -43,7 +43,7 @@ public class VehicleResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Vehicle>> listAvailableCars() {
-        return new ResponseEntity<>(vehicleRepo.findAll(), HttpStatus.OK);
+       return new ResponseEntity<>(vehicleRepo.findAll(), HttpStatus.OK);
     }
 	
 	/**
