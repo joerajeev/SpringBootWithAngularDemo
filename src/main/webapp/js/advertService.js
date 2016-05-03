@@ -1,6 +1,6 @@
 /**
  * Not used.
- * Just here to demo the alternative of using a service instead of a factory
+ * Just here to demonstrate the alternative of using a service instead of a factory
  * 
  */
 (function(){

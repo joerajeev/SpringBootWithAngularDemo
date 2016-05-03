@@ -3,7 +3,7 @@
  */
 (function() {
 	
-	var NewAdvertController = function($scope, $http, $log, advertFactory) {
+	var CreateAdvertController = function($scope, $http, $log, advertFactory) {
 		
 		$scope.searchText = undefined;
 		$scope.advert = new Object();
@@ -27,8 +27,8 @@
 			 	});
 		  };
 		  
-		  $scope.updateVehicleEditForm = function() {
-			  $scope.advert.vehicle = $scope.vehicle;
+		  $scope.selectVehicle = function() {
+			  $scope.advert.vehicle = $scope.selectedVehicle;
 		  }
 		  
 		  $scope.clearExistingVehicle = function() {
@@ -37,5 +37,5 @@
 		 
 	};
 	
-	angular.module('carsales').controller('NewAdvertController', NewAdvertController);
+	angular.module('carsales').controller('CreateAdvertController', CreateAdvertController);
 }());

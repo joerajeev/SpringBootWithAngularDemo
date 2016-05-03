@@ -13,7 +13,7 @@
 				templateUrl: '../views/adverts.html'
 			})
 			.when('/new-advert', {
-				controller: 'NewAdvertController',
+				controller: 'CreateAdvertController',
 				templateUrl: '../views/new-advert.html'
 			})
 			.when('/advert/:id', {

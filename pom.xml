@@ -52,7 +52,7 @@
 		</plugins>
 	</build>
 	<dependencies>
-		<!-- Note: hamcrest needs to be brought in early else junit 
+		<!-- Note: Do not re-order hamcrest-all. It needs to be brought in early else junit 
 		will bring it's own org.hamcrest.Matcher that will be used instead 
 		and cause havoc. -->
 		<dependency>

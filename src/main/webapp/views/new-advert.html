@@ -37,10 +37,10 @@
 						</div>
 						<div class="col-sm-5">
 							<input type="text" ng-show="vehicleInputMethod == 'search'"
-								ng-model="vehicle"
+								ng-model="selectedVehicle"
 								uib-typeahead="vehicle as vehicle.reg for vehicle in vehicles | filter:{reg:$viewValue} | limitTo:8"
 								class="form-control"
-								typeahead-on-select="updateVehicleEditForm()" />
+								typeahead-on-select="selectVehicle()" />
 						</div>
 					</div>
 				</fieldset>
