@@ -3,7 +3,7 @@
  */
 (function() {
 	
-	var AdvertsController = function($scope, $http, $log, advertFactory) {
+	var AdvertsController = function($scope, $http, $log, $location, advertFactory) {
 		
 		advertFactory.getAds()
 			.success(function (response) {
@@ -13,9 +13,9 @@
 				$log.log( "Error loading adverts. Status: "+ status);
 			});
 		
-		  $scope.showAdvert = function(advert) {
-			  window.location.href = "#/advert/" + advert.id; 
-		  }
+		 $scope.showAdvert = function(advert) {
+			 $location.path("/advert/" + advert.id);
+		 }
 		 
 	};
 	
