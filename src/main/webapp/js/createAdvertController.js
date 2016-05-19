@@ -8,6 +8,8 @@
 		$scope.searchText = undefined;
 		$scope.advert = new Object();
 		  
+		//Load the vehicles into $scope to be used by search existing vehicle
+		//while creating an advert.
 		 $http.get('/api/cars')
 			.success(function (response) {
 				$scope.vehicles = response;
