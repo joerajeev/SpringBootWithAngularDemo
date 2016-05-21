@@ -51,7 +51,7 @@ import com.joerajeev.carsales.repository.VehicleRepository;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest
-public class VehicleResourceIntTest {
+public class VehicleResourceTest {
 	
 	//Default vehicle test data
 	private static final Integer VEHICLE_YEAR = 2014;

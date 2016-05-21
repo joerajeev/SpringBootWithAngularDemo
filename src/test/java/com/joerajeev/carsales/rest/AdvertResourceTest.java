@@ -48,15 +48,15 @@ import com.joerajeev.carsales.repository.UserRepository;
 import com.joerajeev.carsales.repository.VehicleRepository;
 
 /**
- * Test class for the VechileResource REST controller.
+ * Test class for the AdvertResource REST controller.
  *
- * @see VechicleResource
+ * @see AdvertResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest
-public class AdvertResourceIntTest {
+public class AdvertResourceTest {
 	
 	private static final Date ADVERT_CREATED = new Date();
 	private static final String ADVERT_DESCRIPTION = "An awesome newish car";
